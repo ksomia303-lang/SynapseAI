@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SynapseAI — Real-World AI Solutions Powered by GLM 5.1</title>
+<meta name="description" content="Deploy production-grade AI across healthcare, finance, education, and more. SynapseAI provides the infrastructure, models, and tools to turn AI potential into measurable business outcomes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#09090b;--bg-card:#111113;--bg-card-hover:#161618;
+--text:#fafafa;--text-muted:#a1a1aa;--text-muted-light:#71717a;
+--border:rgba(255,255,255,0.08);--border-hover:rgba(16,185,129,0.3);
+--emerald:#10b981;--emerald-light:#34d399;--emerald-dark:#059669;
+--emerald-glow:rgba(16,185,129,0.15);--emerald-glow-strong:rgba(16,185,129,0.25);
+--glass-bg:rgba(9,9,11,0.75);--glass-border:rgba(255,255,255,0.06);
+--radius:0.75rem;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+button,input,textarea{font-family:inherit;border:none;outline:none;background:none}
+::selection{background:var(--emerald);color:#000}
+
+/* UTILITIES */
+.container{max-width:1280px;margin:0 auto;padding:0 1.5rem}
+@media(min-width:640px){.container{padding:0 2rem}}
+@media(min-width:1024px){.container{padding:0 4rem}}
+
+.badge-label{display:inline-flex;align-items:center;gap:0.5rem;padding:0.35rem 0.85rem;border-radius:9999px;font-size:0.7rem;font-weight:600;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.18);color:var(--emerald-light);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:1rem}
+.gradient-text{background:linear-gradient(135deg,var(--emerald-light),var(--emerald),#2dd4bf);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.btn-primary{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 2rem;background:var(--emerald);color:#fff;font-weight:600;font-size:0.95rem;border-radius:var(--radius);cursor:pointer;transition:all 0.3s;border:none;box-shadow:0 10px 25px -5px rgba(16,185,129,0.3)}
+.btn-primary:hover{background:var(--emerald-dark);box-shadow:0 10px 35px -5px rgba(16,185,129,0.45);transform:translateY(-1px)}
+.btn-outline{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 2rem;background:transparent;color:var(--text);font-weight:500;font-size:0.95rem;border-radius:var(--radius);cursor:pointer;transition:all 0.3s;border:1px solid var(--border)}
+.btn-outline:hover{border-color:var(--border-hover);background:rgba(16,185,129,0.05)}
+.btn-sm{padding:0.5rem 1rem;font-size:0.85rem}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes pulse-glow{0%,100%{opacity:0.4}50%{opacity:1}}
+@keyframes slide-left{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes particle-float{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100vh) translateX(20px);opacity:0}}
+
+.animate{animation:fadeUp 0.6s ease-out both}
+.delay-1{animation-delay:0.1s}.delay-2{animation-delay:0.2s}.delay-3{animation-delay:0.3s}.delay-4{animation-delay:0.4s}
+
+/* SCROLL ANIMATION */
+.reveal{opacity:0;transform:translateY(30px);transition:all 0.6s ease-out}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* PARTICLES */
+.particle{position:absolute;border-radius:50%;background:var(--emerald-light);animation:particle-float linear infinite;opacity:0}
+
+/* NAVBAR */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:100;transition:all 0.3s;padding:0.5rem 0}
+.navbar.scrolled{background:var(--glass-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);box-shadow:0 4px 30px rgba(0,0,0,0.3)}
+.navbar-inner{display:flex;align-items:center;justify-content:space-between;height:4rem}
+@media(min-width:1024px){.navbar-inner{height:5rem}}
+.logo{display:flex;align-items:center;gap:0.65rem;font-size:1.25rem;font-weight:700}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:0.5rem;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.18);display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:1.25rem;height:1.25rem;color:var(--emerald-light)}
+.nav-links{display:none;gap:0.25rem;align-items:center}
+@media(min-width:768px){.nav-links{display:flex}}
+.nav-links a{padding:0.5rem 1rem;font-size:0.875rem;font-weight:500;color:var(--text-muted);border-radius:0.5rem;transition:all 0.2s}
+.nav-links a:hover{color:var(--text);background:rgba(255,255,255,0.04)}
+.nav-cta{display:none;align-items:center;gap:0.75rem}
+@media(min-width:768px){.nav-cta{display:flex}}
+.nav-cta .btn-ghost{padding:0.5rem 1rem;font-size:0.875rem;font-weight:500;color:var(--text-muted);border-radius:0.5rem;cursor:pointer;transition:all 0.2s;border:none;background:none}
+.nav-cta .btn-ghost:hover{color:var(--text)}
+.mobile-toggle{display:flex;align-items:center;justify-content:center;width:2.5rem;height:2.5rem;color:var(--text-muted);cursor:pointer;border-radius:0.5rem;transition:all 0.2s;border:none;background:none}
+@media(min-width:768px){.mobile-toggle{display:none}}
+.mobile-toggle:hover{color:var(--text)}
+.mobile-menu{display:none;position:fixed;top:4rem;left:0;right:0;z-index:90;padding:1rem}
+.mobile-menu.open{display:block;animation:fadeIn 0.2s ease-out}
+.mobile-menu-inner{background:var(--glass-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:1rem;padding:1rem;box-shadow:0 20px 50px rgba(0,0,0,0.4)}
+.mobile-menu-inner a{display:block;padding:0.75rem 1rem;font-size:0.875rem;font-weight:500;color:var(--text-muted);border-radius:0.5rem;transition:all 0.2s}
+.mobile-menu-inner a:hover{color:var(--text);background:rgba(255,255,255,0.04)}
+.mobile-menu-inner .divider{height:1px;background:var(--border);margin:0.5rem 0}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(16,185,129,0.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 60%,rgba(6,95,70,0.05) 0%,transparent 50%),var(--bg)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at center,black 30%,transparent 70%)}
+.hero-glow{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:800px;height:600px;background:rgba(16,185,129,0.04);border-radius:50%;filter:blur(120px)}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:900px;margin:0 auto;padding:6rem 0 4rem}
+@media(min-width:640px){.hero-content{padding-top:8rem}}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.4rem 1rem;border-radius:9999px;font-size:0.8rem;font-weight:500;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.18);color:var(--emerald-light);margin-bottom:2rem}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--emerald-light);animation:pulse-glow 2s infinite}
+.hero h1{font-size:clamp(2.25rem,5vw,4.5rem);font-weight:800;line-height:1.1;letter-spacing:-0.03em;margin-bottom:1.5rem}
+.hero p.sub{font-size:clamp(1rem,2vw,1.2rem);color:var(--text-muted);max-width:640px;margin:0 auto 2.5rem;line-height:1.7}
+.hero-buttons{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin-bottom:4rem}
+.hero-buttons svg{width:1rem;height:1rem}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;max-width:700px;margin:0 auto}
+@media(min-width:768px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+.stat-box{text-align:center;padding:1.25rem;border-radius:0.75rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04)}
+.stat-box .val{font-size:1.5rem;font-weight:700}
+@media(min-width:640px){.stat-box .val{font-size:1.875rem}}
+.stat-box .label{font-size:0.8rem;color:var(--text-muted);margin-top:0.25rem}
+.hero-fade{position:absolute;bottom:0;left:0;right:0;height:8rem;background:linear-gradient(to top,var(--bg),transparent);pointer-events:none}
+
+/* TRUSTED BY */
+.trusted{position:relative;padding:4rem 0 3rem;overflow:hidden}
+.trusted h3{text-align:center;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:0.5rem}
+.trusted .sub{text-align:center;font-size:0.75rem;color:var(--text-muted-light);margin-bottom:2rem}
+.trusted-logos{display:flex;flex-wrap:wrap;justify-content:center;gap:0.75rem}
+@media(min-width:640px){.trusted-logos{gap:1rem}}
+@media(min-width:768px){.trusted-logos{gap:1.5rem}}
+.trusted-logo{display:flex;align-items:center;justify-content:center;padding:0.6rem 1.25rem;border-radius:0.5rem;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.05);font-size:0.85rem;font-weight:600;color:var(--text-muted-light);transition:all 0.3s;letter-spacing:0.02em}
+.trusted-logo:hover{border-color:rgba(16,185,129,0.2);background:rgba(16,185,129,0.03);color:var(--emerald-light)}
+
+/* SECTION COMMON */
+.section{position:relative;padding:5rem 0}
+@media(min-width:640px){.section{padding:6rem 0}}
+.section-header{text-align:center;margin-bottom:3rem;max-width:640px;margin-left:auto;margin-right:auto}
+.section-header h2{font-size:clamp(1.75rem,4vw,3rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:1rem}
+.section-header p{font-size:1rem;color:var(--text-muted);line-height:1.7}
+.glow-tl{position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:400px;background:rgba(16,185,129,0.025);border-radius:50%;filter:blur(100px);pointer-events:none}
+.glow-r{position:absolute;top:50%;right:0;transform:translateY(-50%);width:500px;height:500px;background:rgba(16,185,129,0.015);border-radius:50%;filter:blur(120px);pointer-events:none}
+
+/* USE CASES */
+.usecases-grid{display:grid;grid-template-columns:1fr;gap:1.5rem}
+@media(min-width:768px){.usecases-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.usecases-grid{grid-template-columns:repeat(3,1fr)}}
+.uc-card{position:relative;border-radius:1rem;overflow:hidden;background:var(--bg-card);border:1px solid var(--border);transition:all 0.4s;cursor:pointer}
+.uc-card:hover{border-color:var(--border-hover);box-shadow:0 20px 50px -10px rgba(16,185,129,0.1);transform:translateY(-4px)}
+.uc-img{position:relative;height:12rem;overflow:hidden}
+.uc-img .img-placeholder{width:100%;height:100%;object-fit:cover;transition:transform 0.7s}
+.uc-card:hover .img-placeholder{transform:scale(1.08)}
+.uc-img .overlay{position:absolute;inset:0;background:linear-gradient(to top,var(--bg-card),rgba(17,17,19,0.5),transparent)}
+.uc-icon{position:absolute;top:1rem;left:1rem;width:2.5rem;height:2.5rem;border-radius:0.625rem;background:rgba(16,185,129,0.1);backdrop-filter:blur(8px);border:1px solid rgba(16,185,129,0.18);display:flex;align-items:center;justify-content:center}
+.uc-icon svg{width:1.25rem;height:1.25rem;color:var(--emerald-light)}
+.uc-stat{position:absolute;top:1rem;right:1rem;padding:0.3rem 0.75rem;border-radius:9999px;background:rgba(16,185,129,0.15);backdrop-filter:blur(8px);border:1px solid rgba(16,185,129,0.18);font-size:0.7rem;font-weight:600;color:var(--emerald-light)}
+.uc-content{padding:1.5rem}
+.uc-content h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem;transition:color 0.3s}
+.uc-card:hover .uc-content h3{color:var(--emerald-light)}
+.uc-content p{font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:1rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.uc-tags{display:flex;flex-wrap:wrap;gap:0.4rem}
+.uc-tag{padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.7rem;font-weight:500;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:var(--text-muted);transition:all 0.3s}
+.uc-tag:hover{color:var(--emerald-light);border-color:rgba(16,185,129,0.2);background:rgba(16,185,129,0.05)}
+
+/* PLAYGROUND */
+.playground-box{border-radius:1rem;border:1px solid var(--border);overflow:hidden;background:rgba(17,17,19,0.5);box-shadow:0 0 60px -15px rgba(16,185,129,0.08)}
+.pg-header{display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;border-bottom:1px solid var(--border);background:var(--bg-card)}
+.pg-dots{display:flex;gap:0.375rem}
+.pg-dots span{width:0.75rem;height:0.75rem;border-radius:50%}
+.pg-dots span:nth-child(1){background:rgba(239,68,68,0.6)}
+.pg-dots span:nth-child(2){background:rgba(234,179,8,0.6)}
+.pg-dots span:nth-child(3){background:rgba(34,197,94,0.6)}
+.pg-title{display:flex;align-items:center;gap:0.4rem;font-size:0.75rem;color:var(--text-muted);font-family:'Courier New',monospace}
+.pg-title svg{width:0.75rem;height:0.75rem;color:var(--emerald-light)}
+.pg-messages{min-height:300px;max-height:500px;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem}
+@media(min-width:640px){.pg-messages{padding:1.5rem 2rem}}
+.pg-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 0;text-align:center}
+.pg-empty .icon-box{width:3.5rem;height:3.5rem;border-radius:0.75rem;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.18);display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.pg-empty .icon-box svg{width:1.75rem;height:1.75rem;color:var(--emerald-light)}
+.pg-empty p{color:var(--text-muted);font-size:0.875rem}
+.pg-empty .hint{color:var(--text-muted-light);font-size:0.75rem;margin-top:0.25rem}
+.msg{display:flex;max-width:85%}
+.msg.user{align-self:flex-end;justify-content:flex-end}
+.msg.assistant{align-self:flex-start;justify-content:flex-start}
+.msg-bubble{border-radius:1rem;padding:0.75rem 1rem;font-size:0.875rem;line-height:1.6;word-break:break-word}
+.msg.user .msg-bubble{background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.18);color:#d1fae5;border-bottom-right-radius:0.375rem}
+.msg.assistant .msg-bubble{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);color:var(--text);border-bottom-left-radius:0.375rem}
+.msg-label{font-size:0.7rem;font-weight:600;color:var(--emerald-light);margin-bottom:0.375rem;display:block}
+.msg-loading{display:flex;align-items:center;gap:0.5rem;color:var(--text-muted);font-size:0.875rem}
+.msg-loading svg{width:0.85rem;height:0.85rem;animation:spin 1s linear infinite}
+.presets{padding:0 1.5rem 0.75rem;display:flex;flex-wrap:wrap;gap:0.4rem}
+@media(min-width:640px){.presets{padding:0 2rem 0.75rem}}
+.preset-btn{padding:0.375rem 0.75rem;border-radius:9999px;font-size:0.7rem;font-weight:500;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);color:var(--text-muted);cursor:pointer;transition:all 0.3s;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.preset-btn:hover{color:var(--emerald-light);border-color:rgba(16,185,129,0.2);background:rgba(16,185,129,0.05)}
+.pg-input-area{border-top:1px solid var(--border);padding:1rem;display:flex;gap:0.75rem}
+.pg-input{flex:1;min-height:2.75rem;max-height:7.5rem;resize:none;padding:0.65rem 1rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;color:var(--text);font-size:0.85rem;font-family:'Courier New',monospace;transition:all 0.3s;line-height:1.5}
+.pg-input:focus{border-color:rgba(16,185,129,0.4);box-shadow:0 0 0 3px rgba(16,185,129,0.08)}
+.pg-input::placeholder{color:rgba(255,255,255,0.2)}
+.pg-send{width:2.75rem;height:2.75rem;border-radius:0.75rem;background:var(--emerald);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;flex-shrink:0;border:none;box-shadow:0 8px 20px -4px rgba(16,185,129,0.3)}
+.pg-send:hover{background:var(--emerald-dark);box-shadow:0 8px 25px -4px rgba(16,185,129,0.45)}
+.pg-send:disabled{opacity:0.4;cursor:not-allowed}
+.pg-send svg{width:1rem;height:1rem}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+@media(min-width:640px){.features-grid{grid-template-columns:repeat(2,1fr);gap:1.25rem}}
+@media(min-width:1024px){.features-grid{grid-template-columns:repeat(4,1fr)}}
+.feat-card{padding:1.5rem;border-radius:0.75rem;background:var(--bg-card);border:1px solid var(--border);transition:all 0.3s;cursor:default}
+.feat-card:hover{border-color:rgba(16,185,129,0.18);box-shadow:0 10px 30px -5px rgba(16,185,129,0.06)}
+.feat-icon{width:2.5rem;height:2.5rem;border-radius:0.5rem;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;transition:background 0.3s}
+.feat-card:hover .feat-icon{background:rgba(16,185,129,0.12)}
+.feat-icon svg{width:1.25rem;height:1.25rem;color:var(--emerald-light)}
+.feat-card h3{font-size:0.875rem;font-weight:600;margin-bottom:0.5rem;transition:color 0.3s}
+.feat-card:hover h3{color:var(--emerald-light)}
+.feat-card p{font-size:0.8rem;color:var(--text-muted);line-height:1.6}
+
+/* TESTIMONIALS */
+.testimonials-grid{display:grid;grid-template-columns:1fr;gap:1.5rem}
+@media(min-width:768px){.testimonials-grid{grid-template-columns:repeat(3,1fr)}}
+.test-card{padding:1.5rem;border-radius:0.75rem;background:var(--bg-card);border:1px solid var(--border);transition:all 0.3s}
+.test-card:hover{border-color:rgba(16,185,129,0.18)}
+.test-stars{display:flex;gap:0.2rem;margin-bottom:1rem}
+.test-stars svg{width:1rem;height:1rem;fill:var(--emerald-light);color:var(--emerald-light)}
+.test-card blockquote{font-size:0.875rem;color:var(--text-muted);line-height:1.7;margin-bottom:1.5rem}
+.test-author{display:flex;align-items:center;gap:0.75rem}
+.test-avatar{width:2.5rem;height:2.5rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:600;color:#fff}
+.test-avatar.green{background:#059669}
+.test-avatar.blue{background:#2563eb}
+.test-avatar.purple{background:#9333ea}
+.test-name{font-size:0.875rem;font-weight:600}
+.test-role{font-size:0.75rem;color:var(--text-muted)}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:1fr;gap:1.5rem;max-width:960px;margin:0 auto}
+@media(min-width:768px){.pricing-grid{grid-template-columns:repeat(3,1fr);gap:2rem}}
+.price-card{position:relative;padding:2rem;border-radius:1rem;background:var(--bg-card);border:1px solid var(--border);transition:all 0.3s}
+.price-card:hover{border-color:rgba(16,185,129,0.18)}
+.price-card.popular{border-color:rgba(16,185,129,0.3);box-shadow:0 20px 50px -10px rgba(16,185,129,0.08)}
+.price-badge{position:absolute;top:-0.75rem;left:50%;transform:translateX(-50%);padding:0.3rem 0.85rem;border-radius:9999px;background:var(--emerald);color:#fff;font-size:0.7rem;font-weight:600;display:flex;align-items:center;gap:0.3rem;box-shadow:0 8px 20px -4px rgba(16,185,129,0.4)}
+.price-badge svg{width:0.7rem;height:0.7rem}
+.price-card h3{font-size:1.1rem;font-weight:600;margin-bottom:0.25rem}
+.price-card .desc{font-size:0.85rem;color:var(--text-muted);margin-bottom:1.5rem}
+.price-card .price{font-size:2.5rem;font-weight:700;margin-bottom:1.5rem}
+.price-card .price span{font-size:0.875rem;font-weight:400;color:var(--text-muted)}
+.price-features{list-style:none;margin-bottom:2rem}
+.price-features li{display:flex;align-items:flex-start;gap:0.75rem;font-size:0.85rem;color:var(--text-muted);padding:0.4rem 0}
+.price-features li svg{width:1rem;height:1rem;color:var(--emerald-light);flex-shrink:0;margin-top:0.1rem}
+.price-btn{display:block;width:100%;padding:0.75rem;border-radius:0.75rem;font-weight:600;font-size:0.9rem;text-align:center;cursor:pointer;transition:all 0.3s;border:none}
+.price-btn.primary{background:var(--emerald);color:#fff;box-shadow:0 8px 20px -4px rgba(16,185,129,0.3)}
+.price-btn.primary:hover{background:var(--emerald-dark);box-shadow:0 8px 30px -4px rgba(16,185,129,0.45)}
+.price-btn.secondary{background:rgba(255,255,255,0.05);color:var(--text);border:1px solid rgba(255,255,255,0.08)}
+.price-btn.secondary:hover{border-color:rgba(16,185,129,0.25);background:rgba(255,255,255,0.08)}
+
+/* CTA */
+.cta-box{position:relative;overflow:hidden;border-radius:1.5rem;border:1px solid rgba(16,185,129,0.18)}
+.cta-box .bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(16,185,129,0.08),var(--bg-card),rgba(45,212,191,0.04))}
+.cta-box .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:40px 40px;opacity:0.5}
+.cta-box .glow{position:absolute;top:0;right:0;width:400px;height:400px;background:rgba(16,185,129,0.04);border-radius:50%;filter:blur(100px);pointer-events:none}
+.cta-inner{position:relative;padding:3rem 2rem;text-align:center}
+@media(min-width:640px){.cta-inner{padding:4rem 3rem}}
+.cta-inner h2{font-size:clamp(1.75rem,4vw,2.75rem);font-weight:800;letter-spacing:-0.02em;margin-bottom:1rem}
+.cta-inner .sub{font-size:1rem;color:var(--text-muted);max-width:500px;margin:0 auto 2.5rem;line-height:1.7}
+.cta-form{display:flex;flex-direction:column;gap:0.75rem;max-width:420px;margin:0 auto}
+@media(min-width:640px){.cta-form{flex-direction:row}}
+.cta-form .input-wrap{position:relative;flex:1}
+.cta-form .input-wrap svg{position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);width:1rem;height:1rem;color:var(--text-muted)}
+.cta-form input{width:100%;padding:0.75rem 0.75rem 0.75rem 2.5rem;height:3rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;color:var(--text);font-size:0.875rem;transition:all 0.3s}
+.cta-form input:focus{border-color:rgba(16,185,129,0.4);box-shadow:0 0 0 3px rgba(16,185,129,0.08)}
+.cta-form input::placeholder{color:rgba(255,255,255,0.25)}
+.cta-note{font-size:0.75rem;color:var(--text-muted-light);margin-top:1rem}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--border);padding:4rem 0}
+.footer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem}
+@media(min-width:768px){.footer-grid{grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:3rem}}
+.footer-brand p{font-size:0.85rem;color:var(--text-muted);line-height:1.7;margin-top:1rem;margin-bottom:1.5rem;max-width:280px}
+.footer-social{display:flex;gap:0.6rem}
+.footer-social a{width:2.25rem;height:2.25rem;border-radius:0.5rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:all 0.3s}
+.footer-social a:hover{color:var(--emerald-light);border-color:rgba(16,185,129,0.18);background:rgba(16,185,129,0.05)}
+.footer-social a svg{width:1.1rem;height:1.1rem}
+.footer-col h4{font-size:0.85rem;font-weight:600;margin-bottom:1rem}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:0.6rem}
+.footer-col a{font-size:0.85rem;color:var(--text-muted);transition:color 0.2s}
+.footer-col a:hover{color:var(--emerald-light)}
+.footer-bottom{display:flex;flex-direction:column;align-items:center;gap:1rem;padding-top:2.5rem;margin-top:2.5rem;border-top:1px solid rgba(255,255,255,0.04)}
+@media(min-width:640px){.footer-bottom{flex-direction:row;justify-content:space-between}}
+.footer-bottom p{font-size:0.75rem;color:var(--text-muted-light)}
+.footer-bottom-links{display:flex;gap:1.5rem}
+.footer-bottom-links a{font-size:0.75rem;color:var(--text-muted-light);transition:color 0.2s}
+.footer-bottom-links a:hover{color:var(--emerald-light)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:1rem;animation:fadeIn 0.2s ease-out}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--bg-card);border:1px solid var(--border);border-radius:1.25rem;width:100%;max-width:440px;max-height:90vh;overflow-y:auto;animation:fadeUp 0.3s ease-out;box-shadow:0 25px 60px rgba(0,0,0,0.5)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.5rem 1.5rem 0}
+.modal-header h3{font-size:1.25rem;font-weight:700}
+.modal-close{width:2rem;height:2rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;transition:all 0.2s;border:none;background:none}
+.modal-close:hover{color:var(--text);background:rgba(255,255,255,0.06)}
+.modal-body{padding:1.5rem}
+.modal-body p{font-size:0.875rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.6}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:0.8rem;font-weight:600;color:var(--text);margin-bottom:0.35rem}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:0.65rem 0.85rem;height:2.75rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:0.5rem;color:var(--text);font-size:0.875rem;transition:all 0.3s}
+.form-group textarea{height:auto;min-height:5rem;resize:vertical;line-height:1.5}
+.form-group select{appearance:none;cursor:pointer}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:rgba(16,185,129,0.4);box-shadow:0 0 0 3px rgba(16,185,129,0.08)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(255,255,255,0.25)}
+.form-group .checkbox-row{display:flex;align-items:center;gap:0.5rem}
+.form-group .checkbox-row input[type=checkbox]{width:1rem;height:1rem;flex-shrink:0;accent-color:var(--emerald)}
+.form-group .checkbox-row label{font-size:0.8rem;color:var(--text-muted);margin-bottom:0;font-weight:400;cursor:pointer}
+.modal-footer{padding:0 1.5rem 1.5rem}
+.modal-footer .btn-primary{width:100%;justify-content:center}
+.modal-footer .alt-link{text-align:center;margin-top:1rem;font-size:0.8rem;color:var(--text-muted)}
+.modal-footer .alt-link a{color:var(--emerald-light);cursor:pointer;font-weight:500}
+.modal-footer .alt-link a:hover{text-decoration:underline}
+.modal-divider{display:flex;align-items:center;gap:1rem;padding:0 1.5rem;margin:1rem 0}
+.modal-divider span{font-size:0.75rem;color:var(--text-muted-light);white-space:nowrap}
+.modal-divider::before,.modal-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.social-btns{display:flex;gap:0.75rem;padding:0 1.5rem 1.5rem}
+.social-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.6rem;border-radius:0.5rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:var(--text);font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.3s}
+.social-btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15)}
+.social-btn svg{width:1.1rem;height:1.1rem}
+.modal-success{display:none;text-align:center;padding:2rem 1.5rem}
+.modal-success.show{display:block}
+.modal-success .success-icon{width:4rem;height:4rem;border-radius:50%;background:rgba(16,185,129,0.1);border:2px solid rgba(16,185,129,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem}
+.modal-success .success-icon svg{width:2rem;height:2rem;color:var(--emerald-light)}
+.modal-success h3{font-size:1.15rem;font-weight:700;margin-bottom:0.5rem}
+.modal-success p{font-size:0.85rem;color:var(--text-muted);line-height:1.6}
+
+/* TOAST */
+.toast{position:fixed;top:1.5rem;right:1.5rem;z-index:300;padding:1rem 1.5rem;border-radius:0.75rem;background:var(--bg-card);border:1px solid rgba(16,185,129,0.3);box-shadow:0 20px 50px rgba(0,0,0,0.4);display:flex;align-items:center;gap:0.75rem;animation:slideInRight 0.4s ease-out;max-width:380px}
+@keyframes slideInRight{from{opacity:0;transform:translateX(100px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideOutRight{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(100px)}}
+.toast.hide{animation:slideOutRight 0.3s ease-in forwards}
+.toast-icon{width:2rem;height:2rem;border-radius:50%;background:rgba(16,185,129,0.15);border:2px solid rgba(16,185,129,0.3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.toast-icon svg{width:1rem;height:1rem;color:var(--emerald-light)}
+.toast-body h4{font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.15rem}
+.toast-body p{font-size:0.75rem;color:var(--text-muted)}
+.toast-close{width:1.25rem;height:1.25rem;border-radius:0.25rem;display:flex;align-items:center;justify-content:center;color:var(--text-muted);cursor:pointer;transition:all 0.2s;border:none;background:none;flex-shrink:0;margin-left:0.5rem}
+.toast-close:hover{color:var(--text);background:rgba(255,255,255,0.06)}
+</style>
+</head>
+<body>
+
+<!-- ========== MODALS ========== -->
+
+<!-- SIGN IN MODAL -->
+<div class="modal-overlay" id="signInModal" onclick="if(event.target===this)closeModal('signInModal')">
+  <div class="modal-box">
+    <div id="signInForm">
+      <div class="modal-header">
+        <h3>Welcome Back</h3>
+        <button class="modal-close" onclick="closeModal('signInModal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <p>Sign in to your SynapseAI account to access your dashboard, API keys, and projects.</p>
+        <div class="form-group"><label>Email Address</label><input type="email" id="siEmail" placeholder="you@company.com"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="siPassword" placeholder="Enter your password"></div>
+        <div class="form-group"><div class="checkbox-row"><input type="checkbox" id="siRemember"><label for="siRemember">Remember me for 30 days</label></div></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" id="signInBtn" onclick="handleSignIn()">Sign In</button>
+        <div class="alt-link">Don't have an account? <a onclick="closeModal('signInModal');openModal('signUpModal')">Create one free</a></div>
+      </div>
+      <div class="modal-divider"><span>or continue with</span></div>
+      <div class="social-btns">
+        <button class="social-btn" onclick="handleSocial('Google')"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Google</button>
+        <button class="social-btn" onclick="handleSocial('GitHub')"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> GitHub</button>
+      </div>
+    </div>
+    <div class="modal-success" id="signInSuccess">
+      <div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h3>Welcome Back!</h3>
+      <p>You are now signed in to SynapseAI. Redirecting to your dashboard...</p>
+      <button class="btn-primary" style="margin-top:1.5rem" onclick="closeModal('signInModal')">Go to Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIGN UP MODAL -->
+<div class="modal-overlay" id="signUpModal" onclick="if(event.target===this)closeModal('signUpModal')">
+  <div class="modal-box">
+    <div id="signUpForm">
+      <div class="modal-header">
+        <h3>Create Your Account</h3>
+        <button class="modal-close" onclick="closeModal('signUpModal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <p>Start your 14-day free trial. No credit card required. Get 10,000 free API calls instantly.</p>
+        <div class="form-group"><label>Full Name</label><input type="text" id="suName" placeholder="John Doe"></div>
+        <div class="form-group"><label>Work Email</label><input type="email" id="suEmail" placeholder="you@company.com"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="suPassword" placeholder="Min. 8 characters"></div>
+        <div class="form-group"><div class="checkbox-row"><input type="checkbox" id="suTerms"><label for="suTerms">I agree to the <a style="color:var(--emerald-light)" onclick="closeModal('signUpModal')">Terms of Service</a> and <a style="color:var(--emerald-light)" onclick="closeModal('signUpModal')">Privacy Policy</a></label></div></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" onclick="handleSignUp()">Create Free Account</button>
+        <div class="alt-link">Already have an account? <a onclick="closeModal('signUpModal');openModal('signInModal')">Sign in</a></div>
+      </div>
+      <div class="modal-divider"><span>or continue with</span></div>
+      <div class="social-btns">
+        <button class="social-btn" onclick="handleSocial('Google')"><svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Google</button>
+        <button class="social-btn" onclick="handleSocial('GitHub')"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> GitHub</button>
+      </div>
+    </div>
+    <div class="modal-success" id="signUpSuccess">
+      <div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h3>Account Created Successfully!</h3>
+      <p>Welcome to SynapseAI! Your account has been created. You now have 10,000 free API calls. Check your email for verification and API key setup instructions.</p>
+      <button class="btn-primary" style="margin-top:1.5rem" onclick="closeModal('signUpModal')">Go to Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT SALES MODAL -->
+<div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeModal('contactModal')">
+  <div class="modal-box">
+    <div id="contactForm">
+      <div class="modal-header">
+        <h3>Contact Sales</h3>
+        <button class="modal-close" onclick="closeModal('contactModal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <p>Tell us about your needs and our team will get back to you within 24 hours with a custom Enterprise plan.</p>
+        <div class="form-group"><label>Full Name</label><input type="text" id="csName" placeholder="John Doe"></div>
+        <div class="form-group"><label>Work Email</label><input type="email" id="csEmail" placeholder="you@company.com"></div>
+        <div class="form-group"><label>Company Name</label><input type="text" id="csCompany" placeholder="Acme Corp"></div>
+        <div class="form-group"><label>Estimated API Calls / Month</label>
+        <select id="csVolume"><option value="">Select volume...</option><option>Under 100K</option><option>100K - 1M</option><option>1M - 10M</option><option>10M+</option></select></div>
+        <div class="form-group"><label>Message (Optional)</label><textarea id="csMessage" placeholder="Tell us more about your use case..."></textarea></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" onclick="handleContactSales()">Submit Request</button>
+      </div>
+    </div>
+    <div class="modal-success" id="contactSuccess">
+      <div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h3>Request Submitted!</h3>
+      <p>Thank you for your interest in SynapseAI Enterprise. Our sales team will contact you within 24 hours at the email address you provided.</p>
+      <button class="btn-primary" style="margin-top:1.5rem" onclick="closeModal('contactModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- DEMO MODAL -->
+<div class="modal-overlay" id="demoModal" onclick="if(event.target===this)closeModal('demoModal')">
+  <div class="modal-box" style="max-width:680px">
+    <div class="modal-header">
+      <h3>SynapseAI Platform Demo</h3>
+      <button class="modal-close" onclick="closeModal('demoModal')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div style="padding:1.5rem">
+      <div id="demoVideoArea" style="aspect-ratio:16/9;background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(17,17,19,0.8));border-radius:0.75rem;border:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;margin-bottom:1.5rem;position:relative;overflow:hidden;transition:all 0.5s">
+        <div id="demoPlayBtn" style="width:4rem;height:4rem;border-radius:50%;background:rgba(16,185,129,0.15);border:2px solid rgba(16,185,129,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;z-index:2" onmouseover="this.style.background='rgba(16,185,129,0.35)';this.style.transform='scale(1.1)'" onmouseout="this.style.background='rgba(16,185,129,0.15)';this.style.transform='scale(1)'" onclick="playDemo()">
+          <svg id="demoPlayIcon" width="1.5rem" height="1.5rem" viewBox="0 0 24 24" fill="var(--emerald-light)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <p id="demoVideoText" style="font-size:0.85rem;color:var(--text-muted);z-index:2">Platform overview — 3 min</p>
+        <div id="demoSlides" style="position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center">
+          <div id="demoSlideIcon" style="width:3rem;height:3rem;border-radius:0.75rem;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:1rem">
+            <svg width="1.5rem" height="1.5rem" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-light)" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h4 id="demoSlideTitle" style="font-size:1rem;font-weight:700;margin-bottom:0.5rem;color:var(--text)"></h4>
+          <p id="demoSlideDesc" style="font-size:0.8rem;color:var(--text-muted);line-height:1.5;max-width:400px"></p>
+          <div style="display:flex;gap:0.375rem;margin-top:1rem" id="demoDots"></div>
+        </div>
+      </div>
+      <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:1rem">See how SynapseAI helps enterprises deploy production-grade AI in minutes. This demo covers the dashboard, API playground, model management, and analytics features.</p>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <button class="btn-primary btn-sm" onclick="closeModal('demoModal');openModal('signUpModal')">Start Free Trial</button>
+        <button class="btn-outline btn-sm" onclick="closeModal('demoModal')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.5V11h3a3 3 0 0 1 3 3v1.5a3.5 3.5 0 0 1-3 3.5H7a3.5 3.5 0 0 1-3-3.5V14a3 3 0 0 1 3-3h3V9.5A4 4 0 0 1 8 6a4 4 0 0 1 4-4z"/><circle cx="12" cy="6" r="1.5"/></svg>
+        </div>
+        <span><span style="color:#fff">Synapse</span><span style="color:var(--emerald-light)">AI</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#use-cases">Use Cases</a>
+        <a href="#features">Features</a>
+        <a href="#playground">Playground</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <div class="nav-cta">
+        <button class="btn-ghost" onclick="openModal('signInModal')">Sign In</button>
+        <button class="btn-primary btn-sm" onclick="openModal('signUpModal')">Get Started</button>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" onclick="toggleMobile()">
+        <svg id="menuIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg id="closeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-inner">
+      <a href="#use-cases" onclick="closeMobile()">Use Cases</a>
+      <a href="#features" onclick="closeMobile()">Features</a>
+      <a href="#playground" onclick="closeMobile()">Playground</a>
+      <a href="#pricing" onclick="closeMobile()">Pricing</a>
+      <div class="divider"></div>
+      <a href="#" onclick="closeMobile();openModal('signInModal')">Sign In</a>
+      <button class="btn-primary" style="width:100%;margin-top:0.5rem;justify-content:center" onclick="closeMobile();openModal('signUpModal')">Get Started</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div id="particles"></div>
+  <div class="container" style="position:relative;z-index:2">
+    <div class="hero-content">
+      <div class="animate">
+        <span class="hero-badge">
+          <span class="dot"></span>
+          Now powered by GLM 5.1 — Our most capable model yet
+        </span>
+      </div>
+      <h1 class="animate delay-1">
+        Build Real-World AI Solutions <span class="gradient-text">with GLM 5.1</span>
+      </h1>
+      <p class="sub animate delay-2">
+        Deploy production-grade AI across healthcare, finance, education, and more. SynapseAI provides the infrastructure, models, and tools to turn AI potential into measurable business outcomes.
+      </p>
+      <div class="hero-buttons animate delay-3">
+        <button class="btn-primary" onclick="openModal('signUpModal')">
+          Start Free Trial
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <button class="btn-outline" onclick="openModal('demoModal')">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="color:var(--emerald-light)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Watch Demo
+        </button>
+      </div>
+      <div class="stats-grid animate delay-4">
+        <div class="stat-box"><div class="val">500+</div><div class="label">Enterprise Clients</div></div>
+        <div class="stat-box"><div class="val">2M+</div><div class="label">API Calls/Day</div></div>
+        <div class="stat-box"><div class="val">99.9%</div><div class="label">Uptime</div></div>
+        <div class="stat-box"><div class="val">50+</div><div class="label">AI Models</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-fade"></div>
+</section>
+
+<!-- ========== TRUSTED BY ========== -->
+<section class="trusted reveal">
+  <div class="container">
+    <h3>Trusted by Industry Leaders</h3>
+    <p class="sub">Powering AI transformation at the world's most innovative companies</p>
+    <div class="trusted-logos">
+      <span class="trusted-logo">Google Cloud</span>
+      <span class="trusted-logo">Microsoft Azure</span>
+      <span class="trusted-logo">AWS</span>
+      <span class="trusted-logo">Samsung</span>
+      <span class="trusted-logo">Siemens</span>
+      <span class="trusted-logo">Tesla</span>
+      <span class="trusted-logo">Samsung SDS</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== USE CASES ========== -->
+<section class="section" id="use-cases">
+  <div class="glow-tl"></div>
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="badge-label">AI USE CASES</span>
+      <h2>Real-World AI <span class="gradient-text">Use Cases</span></h2>
+      <p>Discover how leading organizations leverage GLM 5.1 to transform their operations, reduce costs, and unlock new revenue streams.</p>
+    </div>
+    <div class="usecases-grid">
+
+      <!-- Healthcare -->
+      <div class="uc-card reveal">
+        <div class="uc-img">
+          <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop" alt="Healthcare AI" class="img-placeholder" loading="lazy">
+          <div class="overlay"></div>
+          <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div>
+          <div class="uc-stat">98.5% diagnostic accuracy</div>
+        </div>
+        <div class="uc-content">
+          <h3>Medical Diagnosis & Drug Discovery</h3>
+          <p>AI-powered medical imaging analysis, patient record processing, and drug candidate identification. Our models achieve clinical-grade accuracy in detecting anomalies across radiology, pathology, and dermatology datasets.</p>
+          <div class="uc-tags">
+            <span class="uc-tag">Medical Imaging</span>
+            <span class="uc-tag">Drug Discovery</span>
+            <span class="uc-tag">Patient Analytics</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finance -->
+      <div class="uc-card reveal">
+        <div class="uc-img">
+          <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop" alt="Financial AI" class="img-placeholder" loading="lazy">
+          <div class="overlay"></div>
+          <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+          <div class="uc-stat">$2.4B fraud prevented</div>
+        </div>
+        <div class="uc-content">
+          <h3>Risk Analysis & Fraud Detection</h3>
+          <p>Real-time transaction monitoring with adaptive fraud scoring, credit risk assessment, and predictive market analytics. Process millions of transactions per second with sub-10ms decision latency.</p>
+          <div class="uc-tags">
+            <span class="uc-tag">Risk Management</span>
+            <span class="uc-tag">Fraud Detection</span>
+            <span class="uc-tag">Trading AI</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Education -->
+      <div class="uc-card reveal">
+        <div class="uc-img">
+          <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=400&fit=crop" alt="Education AI" class="img-placeholder" loading="lazy">
+          <div class="overlay"></div>
+          <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+          <div class="uc-stat">45% better learning outcomes</div>
+        </div>
+        <div class="uc-content">
+          <h3>Personalized Learning at Scale</h3>
+          <p>Adaptive learning paths that adjust to each student's pace, automated grading with detailed feedback, and intelligent tutoring systems that provide 24/7 academic support across all subjects.</p>
+          <div class="uc-tags">
+            <span class="uc-tag">Adaptive Learning</span>
+            <span class="uc-tag">Auto Grading</span>
+            <span class="uc-tag">AI Tutor</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code -->
+      <div class="uc-card reveal">
+        <div class="uc-img">
+          <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop" alt="Code AI" class="img-placeholder" loading="lazy">
+          <div class="overlay"></div>
+          <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+          <div class="uc-stat">10x developer productivity</div>
+        </div>
+        <div class="uc-content">
+          <h3>AI-Powered Software Development</h3>
+          <p>Context-aware code completion across 50+ languages, automated code review with security vulnerability detection, and intelligent bug localization that reduces debugging time by up to 80%.</p>
+          <div class="uc-tags">
+            <span class="uc-tag">Code Completion</span>
+            <span class="uc-tag">Code Review</span>
+            <span class="uc-tag">Bug Detection</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="uc-card reveal">
+        <div class="uc-img">
+          <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=600&h=400&fit=crop" alt="Content AI" class="img-placeholder" loading="lazy">
+          <div class="overlay"></div>
+          <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg></div>
+          <div class="uc-stat">5M+ articles generated</div>
+        </div>
+        <div class="uc-content">
+          <h3>Enterprise Content Creation</h3>
+          <p>Generate on-brand marketing copy, technical documentation, and multilingual content at scale. Advanced summarization and tone adaptation ensure consistency across all your communication channels.</p>
+          <div class="uc-tags">
+            <span class="uc-tag">Content Writing</span>
+            <span class="uc-tag">Translation</span>
+            <span class="uc-tag">Summarization</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support -->
+      <div class="uc-card reveal">
+        <div class="uc-img">
+          <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?w=600&h=400&fit=crop" alt="Support AI" class="img-placeholder" loading="lazy">
+          <div class="overlay"></div>
+          <div class="uc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></div>
+          <div class="uc-stat">85% first-contact resolution</div>
+        </div>
+        <div class="uc-content">
+          <h3>Intelligent Customer Service</h3>
+          <p>Deploy AI chatbots that understand context and sentiment, automatically route complex tickets to the right agents, and provide real-time coaching suggestions for your support team.</p>
+          <div class="uc-tags">
+            <span class="uc-tag">AI Chatbots</span>
+            <span class="uc-tag">Sentiment Analysis</span>
+            <span class="uc-tag">Auto Routing</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== PLAYGROUND ========== -->
+<section class="section" id="playground">
+  <div style="position:absolute;bottom:0;left:25%;width:500px;height:500px;background:rgba(16,185,129,0.02);border-radius:50%;filter:blur(120px);pointer-events:none"></div>
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="badge-label">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        LIVE PLAYGROUND
+      </span>
+      <h2>Try GLM 5.1 <span class="gradient-text">Live</span></h2>
+      <p>Experience the power of our AI model in real-time. Type a prompt or choose a suggestion below.</p>
+    </div>
+    <div class="playground-box reveal" style="max-width:800px;margin:0 auto">
+      <div class="pg-header">
+        <div class="pg-dots"><span></span><span></span><span></span></div>
+        <div class="pg-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          GLM 5.1 — Playground
+        </div>
+      </div>
+      <div class="pg-messages" id="pgMessages">
+        <div class="pg-empty" id="pgEmpty">
+          <div class="icon-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          </div>
+          <p>No messages yet</p>
+          <p class="hint">Try one of the prompts below to get started</p>
+        </div>
+      </div>
+      <div class="presets" id="pgPresets">
+        <button class="preset-btn" onclick="sendPreset(this)">Explain quantum computing in simple terms</button>
+        <button class="preset-btn" onclick="sendPreset(this)">Write a professional marketing email for a SaaS product</button>
+        <button class="preset-btn" onclick="sendPreset(this)">Analyze key data trends in enterprise AI adoption</button>
+        <button class="preset-btn" onclick="sendPreset(this)">Generate a Python function to find prime numbers</button>
+      </div>
+      <div class="pg-input-area">
+        <textarea class="pg-input" id="pgInput" placeholder="Type your prompt here... (Enter to send)" rows="1" onkeydown="handleKey(event)"></textarea>
+        <button class="pg-send" id="pgSend" onclick="sendMessage()" disabled>
+          <svg id="sendIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          <svg id="loadingIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FEATURES ========== -->
+<section class="section" id="features">
+  <div class="glow-r"></div>
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="badge-label">PLATFORM FEATURES</span>
+      <h2>Why Choose <span class="gradient-text">SynapseAI</span></h2>
+      <p>Everything you need to build, deploy, and scale AI-powered applications — from prototype to production.</p>
+    </div>
+    <div class="features-grid">
+
+      <div class="feat-card reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg></div>
+        <h3>Multi-Modal AI</h3>
+        <p>Process text, images, code, audio, and video through a unified API. GLM 5.1 handles complex cross-modal reasoning that powers next-generation applications.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
+        <h3>Enterprise Security</h3>
+        <p>SOC2 Type II, HIPAA, and GDPR compliant infrastructure. End-to-end encryption, data residency controls, and comprehensive audit logging for regulated industries.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <h3>Low Latency</h3>
+        <p>Sub-100ms median response times across all model sizes. Optimized inference pipelines with intelligent request routing ensure consistent performance at any scale.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>Custom Fine-Tuning</h3>
+        <p>Fine-tune GLM 5.1 on your proprietary data with our guided training pipeline. Achieve domain-specific accuracy improvements of 15-40% with just a few hundred examples.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg></div>
+        <h3>Scalable Infrastructure</h3>
+        <p>Auto-scaling from zero to millions of requests per second. Built on distributed GPU clusters with automatic failover and 99.99% availability SLA.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <h3>Global CDN</h3>
+        <p>40+ edge locations worldwide ensure minimal latency for users anywhere. Intelligent caching and pre-warming strategies optimize response delivery across regions.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <h3>Developer Friendly</h3>
+        <p>REST API with comprehensive SDKs for Python, TypeScript, Go, Java, Rust, Ruby, C#, and Swift. Interactive API playground, webhooks, and streaming support included.</p>
+      </div>
+
+      <div class="feat-card reveal">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h3>24/7 Support</h3>
+        <p>Dedicated AI solution engineers available around the clock. Priority escalation, custom integrations, and proactive monitoring ensure your AI deployments run smoothly.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== TESTIMONIALS ========== -->
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="badge-label">TESTIMONIALS</span>
+      <h2>Trusted by <span class="gradient-text">Industry Leaders</span></h2>
+      <p>Hear from the teams transforming their businesses with SynapseAI.</p>
+    </div>
+    <div class="testimonials-grid">
+
+      <div class="test-card reveal">
+        <div class="test-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <blockquote>"SynapseAI's healthcare models have revolutionized our diagnostic pipeline. We reduced false-positive rates by 73% and cut our analysis time from hours to minutes. The GLM 5.1 model understands medical context in ways that previous solutions simply couldn't match."</blockquote>
+        <div class="test-author">
+          <div class="test-avatar green">SK</div>
+          <div><div class="test-name">Sarah Kim</div><div class="test-role">VP of Engineering, MedTech Global</div></div>
+        </div>
+      </div>
+
+      <div class="test-card reveal">
+        <div class="test-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <blockquote>"We deployed SynapseAI for real-time fraud detection across 12 countries. The results exceeded all expectations — $180M in prevented fraud in the first quarter alone. The API reliability and sub-50ms response times made integration seamless."</blockquote>
+        <div class="test-author">
+          <div class="test-avatar blue">MR</div>
+          <div><div class="test-name">Michael Reeves</div><div class="test-role">CTO, FinEdge Capital</div></div>
+        </div>
+      </div>
+
+      <div class="test-card reveal">
+        <div class="test-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <blockquote>"Our personalized learning platform powered by SynapseAI saw a 45% improvement in student outcomes within the first semester. The fine-tuning capabilities let us adapt the model to our specific curriculum with remarkable precision."</blockquote>
+        <div class="test-author">
+          <div class="test-avatar purple">AL</div>
+          <div><div class="test-name">Aisha Larsson</div><div class="test-role">Director of Product, EduNova</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== PRICING ========== -->
+<section class="section" id="pricing">
+  <div style="position:absolute;bottom:0;right:25%;width:500px;height:500px;background:rgba(16,185,129,0.02);border-radius:50%;filter:blur(120px);pointer-events:none"></div>
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="badge-label">PRICING</span>
+      <h2>Simple, Transparent <span class="gradient-text">Pricing</span></h2>
+      <p>Start free and scale as you grow. No hidden fees, no surprises.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <!-- Starter -->
+      <div class="price-card reveal">
+        <h3>Starter</h3>
+        <p class="desc">Perfect for teams getting started with AI integration.</p>
+        <div class="price">$49<span>/month</span></div>
+        <ul class="price-features">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>10,000 API calls per month</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Access to 2 AI models</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Community forum support</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Basic analytics dashboard</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Standard rate limits</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>REST API access</li>
+        </ul>
+        <button class="price-btn secondary" onclick="openModal('signUpModal')">Start Free Trial</button>
+      </div>
+
+      <!-- Professional -->
+      <div class="price-card popular reveal">
+        <div class="price-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          Most Popular
+        </div>
+        <h3>Professional</h3>
+        <p class="desc">For growing teams that need advanced AI capabilities.</p>
+        <div class="price">$199<span>/month</span></div>
+        <ul class="price-features">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>500,000 API calls per month</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Access to all 50+ AI models</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Priority email & chat support</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Custom fine-tuning (up to 3 models)</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Advanced analytics & reporting</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Webhook & streaming support</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Team collaboration tools</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>99.9% uptime SLA</li>
+        </ul>
+        <button class="price-btn primary" onclick="openModal('signUpModal')">Start Free Trial</button>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="price-card reveal">
+        <h3>Enterprise</h3>
+        <p class="desc">For organizations with advanced security and scale needs.</p>
+        <div class="price">Custom</div>
+        <ul class="price-features">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Unlimited API calls</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Custom model training & deployment</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Dedicated AI solution engineer</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>SOC2, HIPAA, GDPR compliance</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Custom data residency options</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Private cloud or on-premise</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>24/7 phone support with &lt;1hr SLA</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Custom integration development</li>
+        </ul>
+        <button class="price-btn secondary" onclick="openModal('contactModal')">Contact Sales</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA ========== -->
+<section class="section" id="cta-section">
+  <div class="container">
+    <div class="cta-box reveal">
+      <div class="bg"></div>
+      <div class="grid-bg"></div>
+      <div class="glow"></div>
+      <div class="cta-inner">
+        <h2>Ready to Transform Your Business <span class="gradient-text">with AI?</span></h2>
+        <p class="sub">Join 500+ enterprises already using SynapseAI to build smarter, faster, and more efficient operations. Get started in minutes.</p>
+        <form class="cta-form" id="ctaForm" onsubmit="event.preventDefault();handleCTASignup()">
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            <input type="email" id="ctaEmail" placeholder="Enter your work email" required>
+          </div>
+          <button type="submit" class="btn-primary" id="ctaBtn" style="height:3rem;white-space:nowrap">
+            Get Started
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </form>
+        <p class="cta-note" id="ctaNote">No credit card required · 14-day free trial · Cancel anytime</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.5V11h3a3 3 0 0 1 3 3v1.5a3.5 3.5 0 0 1-3 3.5H7a3.5 3.5 0 0 1-3-3.5V14a3 3 0 0 1 3-3h3V9.5A4 4 0 0 1 8 6a4 4 0 0 1 4-4z"/><circle cx="12" cy="6" r="1.5"/></svg></div>
+          <span><span style="color:#fff">Synapse</span><span style="color:var(--emerald-light)">AI</span></span>
+        </a>
+        <p>Enterprise-grade AI infrastructure powering real-world solutions across healthcare, finance, education, and technology. Built on GLM 5.1.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+          <a href="#" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#">AI Models</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">Playground</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Changelog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Developers</h4>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">SDKs</a></li>
+          <li><a href="#">Examples</a></li>
+          <li><a href="#">Status Page</a></li>
+          <li><a href="#">Community</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press Kit</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+          <li><a href="#">GDPR</a></li>
+          <li><a href="#">Security</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 SynapseAI. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+// Navbar scroll effect
+window.addEventListener('scroll', function() {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// Mobile menu
+function toggleMobile() {
+  const menu = document.getElementById('mobileMenu');
+  const menuIcon = document.getElementById('menuIcon');
+  const closeIcon = document.getElementById('closeIcon');
+  const isOpen = menu.classList.contains('open');
+  menu.classList.toggle('open');
+  menuIcon.style.display = isOpen ? 'block' : 'none';
+  closeIcon.style.display = isOpen ? 'none' : 'block';
+}
+function closeMobile() {
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('menuIcon').style.display = 'block';
+  document.getElementById('closeIcon').style.display = 'none';
+}
+
+// Modal functions
+// Toast notification
+function showToast(title, msg) {
+  var existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  var toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = '<div class="toast-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="toast-body"><h4>' + title + '</h4><p>' + msg + '</p></div><button class="toast-close" onclick="this.parentElement.classList.add(\'hide\');setTimeout(function(){document.querySelector(\'.toast\')&&document.querySelector(\'.toast\').remove()},300)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+  document.body.appendChild(toast);
+  setTimeout(function() {
+    if (document.querySelector('.toast')) {
+      document.querySelector('.toast').classList.add('hide');
+      setTimeout(function() { if(document.querySelector('.toast')) document.querySelector('.toast').remove(); }, 300);
+    }
+  }, 4000);
+}
+
+// Reset modal to initial state
+function resetModal(id) {
+  var modal = document.getElementById(id);
+  if (id === 'signUpModal') {
+    var form = document.getElementById('signUpForm');
+    var success = document.getElementById('signUpSuccess');
+    if (form) form.style.display = '';
+    if (success) success.classList.remove('show');
+    var nameInput = document.getElementById('suName');
+    var emailInput = document.getElementById('suEmail');
+    var passInput = document.getElementById('suPassword');
+    var termsInput = document.getElementById('suTerms');
+    if (nameInput) nameInput.value = '';
+    if (emailInput) emailInput.value = '';
+    if (passInput) passInput.value = '';
+    if (termsInput) termsInput.checked = false;
+  }
+  if (id === 'signInModal') {
+    var form = document.getElementById('signInForm');
+    var success = document.getElementById('signInSuccess');
+    if (form) form.style.display = '';
+    if (success) success.classList.remove('show');
+    var emailInput = document.getElementById('siEmail');
+    var passInput = document.getElementById('siPassword');
+    if (emailInput) emailInput.value = '';
+    if (passInput) passInput.value = '';
+  }
+  if (id === 'contactModal') {
+    var form = document.getElementById('contactForm');
+    var success = document.getElementById('contactSuccess');
+    if (form) form.style.display = '';
+    if (success) success.classList.remove('show');
+    var nameInput = document.getElementById('csName');
+    var emailInput = document.getElementById('csEmail');
+    var companyInput = document.getElementById('csCompany');
+    var volumeInput = document.getElementById('csVolume');
+    var msgInput = document.getElementById('csMessage');
+    if (nameInput) nameInput.value = '';
+    if (emailInput) emailInput.value = '';
+    if (companyInput) companyInput.value = '';
+    if (volumeInput) volumeInput.selectedIndex = 0;
+    if (msgInput) msgInput.value = '';
+  }
+  if (id === 'cta-section') {
+    var emailInput = document.getElementById('ctaEmail');
+    var btn = document.getElementById('ctaBtn');
+    var note = document.getElementById('ctaNote');
+    if (emailInput) emailInput.value = '';
+    if (btn) { btn.textContent = 'Get Started'; btn.disabled = false; btn.style.background = ''; }
+    if (note) { note.textContent = 'No credit card required · 14-day free trial · Cancel anytime'; note.style.color = ''; }
+  }
+}
+
+function openModal(id) { resetModal(id); document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
+
+// Demo slides
+var demoSlides = [
+  { title: 'AI Dashboard', desc: 'Monitor all your AI models, API usage, and performance metrics from one unified dashboard. Real-time analytics at your fingertips.', icon: 'dashboard' },
+  { title: 'API Playground', desc: 'Test and iterate on AI models with our interactive playground. Support for GLM 5.1, GPT-4, Claude, and 50+ models.', icon: 'code' },
+  { title: 'Model Management', desc: 'Fine-tune, deploy, and version your AI models. One-click deployment to production with automatic scaling.', icon: 'models' },
+  { title: 'Analytics & Reports', desc: 'Track costs, latency, accuracy, and usage patterns. Generate custom reports for your team and stakeholders.', icon: 'analytics' },
+  { title: 'Enterprise Security', desc: 'SOC 2 compliant, end-to-end encryption, SSO, RBAC, and audit logs. Your data stays private and secure.', icon: 'security' }
+];
+var demoPlaying = false;
+var demoInterval = null;
+var currentSlide = 0;
+
+function playDemo() {
+  if (demoPlaying) {
+    stopDemo();
+    return;
+  }
+  demoPlaying = true;
+  currentSlide = 0;
+  document.getElementById('demoPlayBtn').style.display = 'none';
+  document.getElementById('demoVideoText').style.display = 'none';
+  var slides = document.getElementById('demoSlides');
+  slides.style.display = 'flex';
+  showToast('Demo Started', 'Watch the SynapseAI platform overview!');
+  showSlide(0);
+  demoInterval = setInterval(function() {
+    currentSlide++;
+    if (currentSlide >= demoSlides.length) {
+      stopDemo();
+      showToast('Demo Complete!', 'Ready to try it yourself? Start your free trial!');
+      return;
+    }
+    showSlide(currentSlide);
+  }, 2500);
+}
+
+function showSlide(idx) {
+  var s = demoSlides[idx];
+  document.getElementById('demoSlideTitle').textContent = s.title;
+  document.getElementById('demoSlideDesc').textContent = s.desc;
+  var dotsEl = document.getElementById('demoDots');
+  dotsEl.innerHTML = '';
+  for (var i = 0; i < demoSlides.length; i++) {
+    var dot = document.createElement('div');
+    dot.style.cssText = 'width:' + (i === idx ? '1.5rem' : '0.5rem') + ';height:0.25rem;border-radius:9999px;background:' + (i === idx ? 'var(--emerald-light)' : 'rgba(255,255,255,0.15)') + ';transition:all 0.3s';
+    dotsEl.appendChild(dot);
+  }
+}
+
+function stopDemo() {
+  demoPlaying = false;
+  if (demoInterval) { clearInterval(demoInterval); demoInterval = null; }
+  document.getElementById('demoPlayBtn').style.display = 'flex';
+  document.getElementById('demoVideoText').style.display = 'block';
+  document.getElementById('demoSlides').style.display = 'none';
+}
+
+// Sign In
+function handleSignIn() {
+  var btn = document.getElementById('signInBtn');
+  var email = document.getElementById('siEmail').value;
+  var pass = document.getElementById('siPassword').value;
+  if (!email || !pass) { showToast('Missing Fields', 'Please fill in your email and password.'); return; }
+  if (!email.includes('@')) { showToast('Invalid Email', 'Please enter a valid email address.'); return; }
+  if (pass.length < 6) { showToast('Invalid Password', 'Password must be at least 6 characters.'); return; }
+  btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Signing In...';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+  setTimeout(function() {
+    document.getElementById('signInForm').style.display = 'none';
+    document.getElementById('signInSuccess').classList.add('show');
+    showToast('Signed In!', 'Welcome back to SynapseAI!');
+    btn.innerHTML = 'Sign In';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }, 1500);
+}
+
+// Sign Up
+function handleSignUp() {
+  var btn = document.querySelector('#signUpModal .modal-footer .btn-primary');
+  var name = document.getElementById('suName').value;
+  var email = document.getElementById('suEmail').value;
+  var pass = document.getElementById('suPassword').value;
+  var terms = document.getElementById('suTerms').checked;
+  if (!name || !email || !pass) { showToast('Missing Fields', 'Please fill in all required fields.'); return; }
+  if (!email.includes('@')) { showToast('Invalid Email', 'Please enter a valid email address.'); return; }
+  if (pass.length < 8) { showToast('Invalid Password', 'Password must be at least 8 characters.'); return; }
+  if (!terms) { showToast('Terms Required', 'Please agree to the Terms of Service and Privacy Policy.'); return; }
+  btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Creating Account...';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+  setTimeout(function() {
+    document.getElementById('signUpForm').style.display = 'none';
+    document.getElementById('signUpSuccess').classList.add('show');
+    showToast('Account Created!', 'Welcome to SynapseAI, ' + name + '! Check your email for verification.');
+    btn.innerHTML = 'Create Free Account';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }, 1800);
+}
+
+// Contact Sales
+function handleContactSales() {
+  var btn = document.querySelector('#contactModal .modal-footer .btn-primary');
+  var name = document.getElementById('csName').value;
+  var email = document.getElementById('csEmail').value;
+  var company = document.getElementById('csCompany').value;
+  if (!name || !email || !company) { showToast('Missing Fields', 'Please fill in Name, Email, and Company.'); return; }
+  if (!email.includes('@')) { showToast('Invalid Email', 'Please enter a valid email address.'); return; }
+  btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Submitting...';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+  setTimeout(function() {
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('contactSuccess').classList.add('show');
+    showToast('Request Sent!', 'Our sales team will contact you within 24 hours.');
+    btn.innerHTML = 'Submit Request';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }, 1500);
+}
+
+// Social login
+function handleSocial(provider) {
+  closeModal('signInModal');
+  closeModal('signUpModal');
+  showToast('Redirecting...', 'Connecting to ' + provider + ' authentication...');
+  setTimeout(function() {
+    showToast('Connected!', 'You are now signed in with ' + provider + '. Welcome to SynapseAI!');
+  }, 1500);
+}
+
+// CTA signup
+function handleCTASignup() {
+  var email = document.getElementById('ctaEmail').value;
+  if (!email || !email.includes('@')) { showToast('Invalid Email', 'Please enter a valid email address.'); return; }
+  var btn = document.getElementById('ctaBtn');
+  var note = document.getElementById('ctaNote');
+  btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Sending...';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+  setTimeout(function() {
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Check Your Email!';
+    btn.style.background = '#059669';
+    btn.style.opacity = '1';
+    note.textContent = 'We have sent a verification link to ' + email;
+    note.style.color = 'var(--emerald-light)';
+    showToast('Email Sent!', 'Verification link sent to ' + email);
+  }, 1500);
+}
+
+// Scroll to CTA
+function scrollToCTA() {
+  document.getElementById('cta-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Scroll reveal animation
+const observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '-40px' });
+
+document.querySelectorAll('.reveal').forEach(function(el) {
+  observer.observe(el);
+});
+
+// Generate particles
+(function() {
+  var container = document.getElementById('particles');
+  for (var i = 0; i < 20; i++) {
+    var p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = (60 + Math.random() * 40) + '%';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = Math.random() * 5 + 's';
+    var size = (1 + Math.random() * 2) + 'px';
+    p.style.width = size;
+    p.style.height = size;
+    container.appendChild(p);
+  }
+})();
+
+// Playground functionality
+var pgInput = document.getElementById('pgInput');
+var pgSend = document.getElementById('pgSend');
+var pgMessages = document.getElementById('pgMessages');
+var pgEmpty = document.getElementById('pgEmpty');
+var pgPresets = document.getElementById('pgPresets');
+var isGenerating = false;
+
+var aiResponses = {
+  'quantum': 'Quantum computing is a revolutionary approach to computation that leverages the principles of quantum mechanics — specifically superposition, entanglement, and interference.\n\n**Classical vs Quantum:** Classical computers use bits (0 or 1), while quantum computers use qubits that can exist in multiple states simultaneously through superposition.\n\n**Key Applications:**\n• Drug discovery & molecular simulation\n• Cryptography & security\n• Financial modeling & optimization\n• Machine learning acceleration\n\n**Current State:** Companies like IBM, Google, and Microsoft are building quantum processors with 100+ qubits. While we\'re still in the "noisy intermediate-scale quantum" (NISQ) era, practical applications are emerging rapidly.\n\nThe field is advancing exponentially — what seems impossible today may be routine within a decade.',
+
+  'email': 'Subject: Transform Your Workflow with [Product Name] — Now Available\n\nHi [First Name],\n\nI hope this message finds you well. I\'m reaching out to introduce you to something that could fundamentally change how your team works.\n\n**The Problem:**\nTeams like yours spend an average of 15+ hours per week on repetitive tasks that could be automated — data entry, reporting, scheduling, and communication follow-ups.\n\n**The Solution:**\n[Product Name] is an AI-powered platform that automates these workflows, giving your team back the time they need to focus on what truly matters: strategic thinking, creativity, and growth.\n\n**What makes us different:**\n• 3x faster implementation than competitors\n• 98% customer satisfaction rating\n• ROI within the first 30 days\n\nWe\'d love to show you a personalized demo. Would 15 minutes on [Day] work for your schedule?\n\nBest regards,\n[Your Name]\n[Your Title] | [Company]',
+
+  'data': 'Here are the key data trends in enterprise AI adoption for 2025:\n\n**1. Multi-Modal AI Goes Mainstream**\nEnterprises are moving beyond text-only AI. 67% of Fortune 500 companies now deploy multi-modal models that process text, images, audio, and video simultaneously.\n\n**2. Edge AI Deployment Surges**\nWith latency requirements tightening, 45% of new AI deployments are happening at the edge — on devices, in vehicles, and at IoT endpoints rather than in centralized clouds.\n\n**3. AI Governance Becomes Board-Level Priority**\n82% of enterprises have established formal AI governance frameworks, up from 35% in 2023. Responsible AI is no longer optional.\n\n**4. Custom Fine-Tuning at Scale**\nThe democratization of fine-tuning means companies with as few as 500 examples can achieve domain-specific accuracy improvements of 25-40%.\n\n**5. Agentic AI Workflows**\nAutonomous AI agents that can plan, execute, and iterate on complex multi-step tasks represent the fastest-growing segment, with 340% YoY growth.\n\n**Investment Outlook:** Global enterprise AI spending is projected to reach $500B by 2026, with healthcare and financial services leading adoption.',
+
+  'python': "Here's an efficient Python function to find prime numbers using the Sieve of Eratosthenes algorithm:\n\n```python\ndef find_primes(n: int) -> list[int]:\n    \"\"\"Find all prime numbers up to n using Sieve of Eratosthenes.\"\"\"\n    if n < 2:\n        return []\n    \n    is_prime = [True] * (n + 1)\n    is_prime[0] = is_prime[1] = False\n    \n    for i in range(2, int(n**0.5) + 1):\n        if is_prime[i]:\n            for j in range(i*i, n + 1, i):\n                is_prime[j] = False\n    \n    return [i for i in range(2, n + 1) if is_prime[i]]\n\n\n# Usage\nprimes = find_primes(100)\nprint(f\"Primes up to 100: {primes}\")\nprint(f\"Total: {len(primes)}\")\n```\n\n**Time Complexity:** O(n log log n)\n**Space Complexity:** O(n)\n\nThis is significantly faster than the naive trial division method (O(n√n)) for finding all primes up to a given number."
+};
+
+function getAIResponse(prompt) {
+  var lower = prompt.toLowerCase().trim();
+
+  // Greetings
+  if (/^(hi|hello|hey|heya|hola|yo|sup|salam|assalam|kia hal|hello there|hi there|greetings|good morning|good afternoon|good evening|howdy|what'?s up|whats up)\b/i.test(lower) || lower === 'hi' || lower === 'hello' || lower === 'hey') {
+    var greetings = [
+      "Hello! 👋 Welcome to SynapseAI. I'm GLM 5.1, ready to help you with anything. What would you like to explore today?",
+      "Hey there! 😊 Great to see you. I'm GLM 5.1 — I can help with coding, writing, research, data analysis, and much more. Just ask!",
+      "Hi! 👋 I'm GLM 5.1 by SynapseAI. How can I assist you today? Try asking me anything!",
+      "Hello! Welcome! I'm your AI assistant powered by GLM 5.1. Feel free to ask me anything — from coding help to creative writing!",
+      "Hey! 😄 I'm GLM 5.1, SynapseAI's most advanced model. What's on your mind today?"
+    ];
+    return greetings[Math.floor(Math.random() * greetings.length)];
+  }
+
+  // How are you
+  if (/how('? ?|  ?)are you|how('? ?|  ?)r u|how('? ?|  ?)s it going|how do you do|kia hal hai|ap kaise ho|hows you/i.test(lower)) {
+    var howAreYou = [
+      "I'm doing great, thanks for asking! 😊 I'm GLM 5.1, running at full power and ready to help. What can I do for you today?",
+      "I'm excellent! Always at 100% when I get to help someone. 🚀 How can I assist you today?",
+      "Fantastic, thank you! I'm here and ready to help you with whatever you need. What would you like to work on?",
+      "I'm doing wonderfully! Every conversation is a new opportunity to help. What's on your mind? 😄"
+    ];
+    return howAreYou[Math.floor(Math.random() * howAreYou.length)];
+  }
+
+  // Who are you / What's your name
+  if (/who are you|what('? ?|  ?)s your name|whats your name|what are you|your name|tumhara naam|tum kaun|ap kaun ho/i.test(lower)) {
+    return "I'm GLM 5.1 — the most advanced AI model built by SynapseAI. I'm designed to help with:\n\n• 💻 **Coding** — Write, debug, and explain code\n• ✍️ **Writing** — Articles, emails, reports, stories\n• 📊 **Data Analysis** — Trends, insights, research\n• 🧠 **Problem Solving** — Strategy, brainstorming\n• 🌐 **Research** — Complex topics, summaries\n\nI'm running right here in this playground. Try me out!";
+  }
+
+  // Thank you
+  if (/thank|thanks|thx|shukriya|dhanyavaad|cheers/i.test(lower)) {
+    var thanks = [
+      "You're welcome! 😊 Happy to help. Let me know if you need anything else!",
+      "Glad I could help! Don't hesitate to ask if you have more questions. 🙌",
+      "My pleasure! Feel free to come back anytime. I'm always here to help! ✨",
+      "No problem at all! That's what I'm here for. Need anything else? 😄"
+    ];
+    return thanks[Math.floor(Math.random() * thanks.length)];
+  }
+
+  // Goodbye
+  if (/^(bye|goodbye|see you|good night|take care|alvida|khuda hafiz|ttyl|cya|later)\b/i.test(lower)) {
+    var byes = [
+      "Goodbye! 👋 It was great chatting with you. Come back anytime!",
+      "See you later! 😊 Remember, I'm always here when you need help. Take care!",
+      "Bye for now! 🚀 Looking forward to our next conversation. Have a great day!",
+      "Take care! Don't forget — I'm available 24/7 whenever you need AI assistance. ✨"
+    ];
+    return byes[Math.floor(Math.random() * byes.length)];
+  }
+
+  // Yes / No responses
+  if (/^(yes|yeah|yep|yup|sure|ok|okay|haan|ha ji|of course|absolutely|definitely)\b/i.test(lower)) {
+    return "Great! 😊 So what would you like to explore? You can ask me about coding, writing, data analysis, research, or any topic you're curious about!";
+  }
+
+  if (/^(no|nope|nah|nhi|not really|not today)\b/i.test(lower)) {
+    return "No problem at all! 😊 I'm here whenever you're ready. Just type anything and we can get started!";
+  }
+
+  // I'm fine / I'm good
+  if (/i('? ?|  ?)m (fine|good|great|ok|okay|doing well|alright)|i am (fine|good|great|ok)/i.test(lower)) {
+    return "That's wonderful to hear! 😊 So how can I help you today? I'm ready for any challenge!";
+  }
+
+  // Love / Like
+  if (/i love you|i like you|you('? ?|  ?)re (amazing|awesome|great|the best|cool)|tum bohat acche ho/i.test(lower)) {
+    return "Aww, that means a lot! 😊 Thank you! I'm always doing my best to help. What can I assist you with today?";
+  }
+
+  // Help
+  if (/^(help|help me|what can you do|capabilities|features|kya kar sakte|madad)\b/i.test(lower)) {
+    return "Here's what I can help you with:\n\n💻 **Coding** — Write code in Python, JavaScript, Java, C++, and 50+ languages\n✍️ **Writing** — Professional emails, articles, stories, reports\n📊 **Data** — Analyze trends, generate insights, create summaries\n🧮 **Math** — Solve equations, explain concepts step-by-step\n🧠 **Ideas** — Brainstorm, plan strategies, creative thinking\n🌐 **Research** — Explain any topic, compare options, deep dives\n🎨 **Creative** — Poems, stories, marketing copy, slogans\n\nJust type your question or use the preset buttons above! 🚀";
+  }
+
+  // Jokes / Fun
+  if (/joke|funny|make me laugh|mazak|fun/i.test(lower)) {
+    var jokes = [
+      "Why do programmers prefer dark mode? Because light attracts bugs! 🐛😄",
+      "Why was the AI so good at poker? Because it always knew when to fold 'em! 🃏",
+      "What's a computer's least favorite food? Spam! 🥫😄",
+      "Why did the developer go broke? Because he used up all his cache! 💸",
+      "How many programmers does it take to change a light bulb? None — that's a hardware problem! 💡😄"
+    ];
+    return jokes[Math.floor(Math.random() * jokes.length)];
+  }
+
+  // Time
+  if (/what('? ?|  ?)s the time|current time|what time|kitna baj|time kya/i.test(lower)) {
+    var now = new Date();
+    var timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    var dateStr = now.toLocaleDateString([], {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+    return "🕐 Right now it's **" + timeStr + "** on **" + dateStr + "** (your local time). How can I help you today?";
+  }
+
+  // Specific topic responses
+  if (lower.includes('quantum')) return aiResponses.quantum;
+  if (lower.includes('email') || lower.includes('marketing') || lower.includes('saas')) return aiResponses.email;
+  if (lower.includes('data') || lower.includes('trend') || lower.includes('adoption')) return aiResponses.data;
+  if (lower.includes('python') || lower.includes('code') || lower.includes('prime')) return aiResponses.python;
+
+  // Short responses for short messages
+  if (lower.length < 15) {
+    var shortResponses = [
+      "I'd love to help! Could you tell me a bit more about what you need? I can assist with coding, writing, research, data analysis, and much more! 🚀",
+      "Sure thing! Can you give me a bit more detail? The more context you provide, the better I can assist you! 😊",
+      "Interesting! Tell me more about what you're looking for and I'll do my best to help. I'm great with coding, writing, analysis, and creative tasks! ✨",
+      "I'm listening! Feel free to ask me anything — from technical questions to creative writing. I'm here to help! 💡"
+    ];
+    return shortResponses[Math.floor(Math.random() * shortResponses.length)];
+  }
+
+  // Default response for anything else
+  return "That's a great question! Let me share my thoughts:\n\nI'm GLM 5.1 by SynapseAI, and I'm designed to be helpful across a wide range of topics. While I'm in demo mode here, in production I can:\n\n• 🔍 Research complex topics in depth\n• 💻 Write and debug code in any language\n• ✍️ Create professional content and communications\n• 📊 Analyze data and generate actionable insights\n• 🧠 Solve problems and brainstorm creative solutions\n\nTry asking me something specific like \"write Python code\" or \"explain quantum computing\" — or use the preset buttons above for curated examples!";
+}
+
+function addMessage(role, content) {
+  if (pgEmpty.style.display !== 'none') {
+    pgEmpty.style.display = 'none';
+  }
+  var msgDiv = document.createElement('div');
+  msgDiv.className = 'msg ' + role;
+
+  var bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+
+  if (role === 'assistant') {
+    var label = document.createElement('span');
+    label.className = 'msg-label';
+    label.textContent = 'GLM 5.1';
+    bubble.appendChild(label);
+  }
+
+  var textNode = document.createTextNode(content);
+  bubble.appendChild(textNode);
+
+  msgDiv.appendChild(bubble);
+  pgMessages.appendChild(msgDiv);
+  pgMessages.scrollTop = pgMessages.scrollHeight;
+
+  return bubble;
+}
+
+function addLoadingMessage() {
+  if (pgEmpty.style.display !== 'none') {
+    pgEmpty.style.display = 'none';
+  }
+  var msgDiv = document.createElement('div');
+  msgDiv.className = 'msg assistant';
+  msgDiv.id = 'loadingMsg';
+
+  var bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+
+  var label = document.createElement('span');
+  label.className = 'msg-label';
+  label.textContent = 'GLM 5.1';
+  bubble.appendChild(label);
+
+  var loading = document.createElement('div');
+  loading.className = 'msg-loading';
+  loading.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Thinking...';
+  bubble.appendChild(loading);
+
+  msgDiv.appendChild(bubble);
+  pgMessages.appendChild(msgDiv);
+  pgMessages.scrollTop = pgMessages.scrollHeight;
+}
+
+function removeLoadingMessage() {
+  var el = document.getElementById('loadingMsg');
+  if (el) el.remove();
+}
+
+function sendMessage() {
+  var text = pgInput.value.trim();
+  if (!text || isGenerating) return;
+  isGenerating = true;
+  pgSend.disabled = true;
+  document.getElementById('sendIcon').style.display = 'none';
+  document.getElementById('loadingIcon').style.display = 'block';
+  pgPresets.style.display = 'none';
+
+  addMessage('user', text);
+  pgInput.value = '';
+  pgInput.style.height = 'auto';
+
+  addLoadingMessage();
+
+  setTimeout(function() {
+    removeLoadingMessage();
+    var response = getAIResponse(text);
+    addMessage('assistant', response);
+    isGenerating = false;
+    pgSend.disabled = false;
+    document.getElementById('sendIcon').style.display = 'block';
+    document.getElementById('loadingIcon').style.display = 'none';
+  }, 1200 + Math.random() * 800);
+}
+
+function sendPreset(btn) {
+  pgInput.value = btn.textContent;
+  sendMessage();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+  // Auto-resize textarea
+  setTimeout(function() {
+    pgInput.style.height = 'auto';
+    pgInput.style.height = Math.min(pgInput.scrollHeight, 120) + 'px';
+  }, 0);
+}
+
+// Enable/disable send button based on input
+pgInput.addEventListener('input', function() {
+  pgSend.disabled = !pgInput.value.trim() || isGenerating;
+});
+</script>
+</body>
+</html>
